@@ -3,37 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X68000 Emulator</title>
-    <script src="https://cdn.jsdelivr.net/npm/px68k-wasm@latest/px68k.js"></script>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        canvas { border: 1px solid black; }
-    </style>
+    <title>GBC Emulator</title>
+    <script src="https://cdn.jsdelivr.net/gh/lrusso/Emulatrix/Emulatrix.js"></script>
 </head>
 <body>
-    <h1>X68000 Emulator</h1>
-    <canvas id="x68k-screen" width="640" height="480"></canvas>
-    <br>
-    <input type="file" id="romLoader" accept=".dim,.hdf,.zip">
+    <h1>Game Boy Color Emulator</h1>
+    <input type="file" id="romUpload" accept=".gbc">
+    <canvas id="screen"></canvas>
+    
     <script>
-        let emulator;
-        document.getElementById('romLoader').addEventListener('change', function(event) {
+        document.getElementById('romUpload').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const romData = new Uint8Array(e.target.result);
-                    startEmulator(romData);
+                    Emulatrix.run({
+                        system: 'GBC',
+                        rom: romData,
+                        canvas: document.getElementById('screen')
+                    });
                 };
                 reader.readAsArrayBuffer(file);
             }
         });
-
-        function startEmulator(romData) {
-            if (emulator) emulator.stop();
-            emulator = new Px68k({ canvas: document.getElementById('x68k-screen') });
-            emulator.loadROM(romData).then(() => emulator.start());
-        }
     </script>
 </body>
 </html>
