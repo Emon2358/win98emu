@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Windows 98 Emulator</h1>
-    <input type="file" id="iso_file" accept=".iso,.exe">
+    <input type="file" id="iso_file" accept=".iso,.exe,.bin">
     <button onclick="startEmulation()">Start Windows 98</button>
     <div id="screen_container">
         <canvas id="vga"></canvas>
@@ -19,7 +19,7 @@
         function startEmulation() {
             const fileInput = document.getElementById("iso_file");
             if (fileInput.files.length === 0) {
-                alert("Please select an ISO or EXE file.");
+                alert("Please select an ISO, EXE, or BIN file.");
                 return;
             }
             
