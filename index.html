@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Windows 98 Emulator</title>
+    <script src="https://copy.sh/v86/build/v86_all.js"></script>
+</head>
+<body>
+    <h1>Windows 98 Emulator</h1>
+    <input type="file" id="iso_file" accept=".iso,.exe">
+    <button onclick="startEmulation()">Start Windows 98</button>
+    <div id="screen_container">
+        <canvas id="vga"></canvas>
+    </div>
+    
+    <script>
+        let emulator;
+        
+        function startEmulation() {
+            const fileInput = document.getElementById("iso_file");
+            if (fileInput.files.length === 0) {
+                alert("Please select an ISO or EXE file.");
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const fileData = event.target.result;
+                
+                emulator = new V86Starter({
+                    wasm_path: "https://copy.sh/v86/build/v86.wasm",
+                    memory_size: 32 * 1024 * 1024,
+                    vga_memory_size: 8 * 1024 * 1024,
+                    screen_container: document.getElementById("screen_container"),
+                    bios: { url: "https://copy.sh/v86/bios/seabios.bin" },
+                    vga_bios: { url: "https://copy.sh/v86/bios/vgabios.bin" },
+                    hda: { buffer: fileData },
+                    autostart: true,
+                });
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>
